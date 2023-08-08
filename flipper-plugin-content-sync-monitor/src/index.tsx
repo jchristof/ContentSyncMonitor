@@ -16,8 +16,6 @@ type Events = {
   contentSyncData: Data;
 };
 
-// Read more: https://fbflipper.com/docs/tutorial/js-custom#creating-a-first-plugin
-// API: https://fbflipper.com/docs/extending/flipper-plugin#pluginclient
 export function plugin(client: PluginClient<Events, {}>) {
   const data = createState<Record<string, Data>>({}, { persist: 'data' });
 
@@ -53,8 +51,7 @@ export function plugin(client: PluginClient<Events, {}>) {
   };
 }
 
-// Read more: https://fbflipper.com/docs/tutorial/js-custom#building-a-user-interface-for-the-plugin
-// API: https://fbflipper.com/docs/extending/flipper-plugin#react-hooks
+
 export function Component() {
   const instance = usePlugin(plugin);
   const data = useValue(instance.data);
@@ -65,15 +62,13 @@ export function Component() {
         <Space wrap>
           <Tooltip title="Request app full sync">
             <Button
-              icon={<ReloadOutlined />}
               onClick={() => instance.syncRequest("sync_everything")}
-            />
+            >Full Sync</Button>
           </Tooltip>
           <Tooltip title="Only resync markups">
             <Button
-              icon={<ReloadOutlined />}
               onClick={() => instance.syncRequest("resync_markups")}
-            />
+            >Markup Resync</Button>
           </Tooltip>
           <Tooltip title="Clear">
           <Button
@@ -99,8 +94,11 @@ export function Component() {
 
 
 function DataComponent({ data: Data }) {
+  const tableRowStyle = {
+    border: '1px solid Gainsboro',
+  }
   return (
-    <tr key={Data.id}>
+    <tr key={Data.id} style={tableRowStyle}>
       <td>{Data.type}</td>
       <td>{Data.operation}</td>
       <td>{Data.status}</td>
@@ -114,6 +112,7 @@ function DataComponent({ data: Data }) {
 function HeaderComponent() {
   const tableHeaderStyle = {
     textAlign: 'left',
+    fontWeight: 'bold'
   };
 
   return (
